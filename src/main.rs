@@ -27,8 +27,6 @@ pub extern "C" fn _start() -> ! {
 
   rust_os::init();
 
-  x86_64::instructions::int3(); // new
-
   #[cfg(test)]
   test_main();
 
