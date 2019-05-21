@@ -4,10 +4,10 @@
 
 use core::panic::PanicInfo;
 use lazy_static::lazy_static;
-use x86_64::structures::idt::{InterruptDescriptorTable, ExceptionStackFrame};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 use rust_os::{exit_qemu, QemuExitCode, serial_println, serial_print};
 
-extern "x86-interrupt" fn test_double_fault_handler(_stack_frame: &mut ExceptionStackFrame, _error_code: u64) {
+extern "x86-interrupt" fn test_double_fault_handler(_stack_frame: &mut InterruptStackFrame, _error_code: u64) {
   serial_println!("[ok]");
   exit_qemu(QemuExitCode::Success);
   loop {}

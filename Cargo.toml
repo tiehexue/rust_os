@@ -14,6 +14,8 @@ volatile = "*"
 spin = "*"
 x86_64 = "*"
 uart_16550 = "*"
+pic8259_simple = "*"
+pc-keyboard = "*"
 
 [profile.dev]
 panic = "abort"

@@ -11,7 +11,7 @@ use rust_os::println;
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
   println!("{}", _info);
-  loop {}
+  rust_os::hlt_loop();
 }
 
 #[cfg(test)]
@@ -30,5 +30,5 @@ pub extern "C" fn _start() -> ! {
   #[cfg(test)]
   test_main();
 
-  panic!("Panic now!");
+  rust_os::hlt_loop();
 }
