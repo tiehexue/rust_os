@@ -1,0 +1,7 @@
+[package]
+name = "rust_os"
+version = "0.1.0"
+authors = ["汪院 <wangy10@chinatelecom.cn>"]
+edition = "2018"
+
+[dependencies]
