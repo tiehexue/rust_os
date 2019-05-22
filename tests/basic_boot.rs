@@ -4,17 +4,19 @@
 #![test_runner(rust_os::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use bootloader::{BootInfo, entry_point};
 use core::panic::PanicInfo;
 use rust_os::{println, serial_print, serial_println};
 
-#[no_mangle] // don't mangle the name of this function
-pub extern "C" fn _start() -> ! {
+entry_point!(test_boot);
+
+fn test_boot(_boot_info: &'static BootInfo) -> ! {
   test_main();
 
   loop {}
 }
 
-fn test_runner(tests: &[&dyn Fn()]) {
+fn test_runner(_tests: &[&dyn Fn()]) {
   unimplemented!();
 }
 

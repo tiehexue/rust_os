@@ -9,7 +9,7 @@ version = "*"
 features = ["spin_no_std"]
 
 [dependencies]
-bootloader = "*"
+bootloader = { version = "*", features = ["map_physical_memory"]}
 volatile = "*"
 spin = "*"
 x86_64 = "*"

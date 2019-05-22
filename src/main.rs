@@ -5,6 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
+use bootloader::{BootInfo, entry_point};
 use rust_os::println;
 
 #[cfg(not(test))]
@@ -20,12 +21,34 @@ fn panic(info: &PanicInfo) -> ! {
   rust_os::test_panic_handler(info);
 }
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+entry_point!(kernel_main);
 
-  println!("Hello Rust OS {}", "!");
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
+  use x86_64::{structures::paging::MapperAllSizes, VirtAddr};
+
+  println!("Hello World{}, {}", "!", boot_info.physical_memory_offset);
   rust_os::init();
+
+  let addresses = [
+    // the identity-mapped vga buffer page
+    0xb8000,
+    // some code page
+    0x20010a,
+    // some stack page
+    0x57ac_001f_fe48,
+    // virtual address mapped to physical address 0
+    boot_info.physical_memory_offset,
+  ];
+
+  let mapper = unsafe { rust_os::memory::init(boot_info.physical_memory_offset) };
+
+  for &address in &addresses {
+    let virt = VirtAddr::new(address);
+    let phys = mapper.translate_addr(virt);
+
+    println!("{:?} -> {:?}", virt, phys);
+  }
 
   #[cfg(test)]
   test_main();

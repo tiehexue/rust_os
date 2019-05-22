@@ -2,6 +2,7 @@
 #![no_main]
 #![feature(abi_x86_interrupt)]
 
+use bootloader::{BootInfo, entry_point};
 use core::panic::PanicInfo;
 use lazy_static::lazy_static;
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
@@ -30,8 +31,9 @@ pub fn init_test_idt() {
   TEST_IDT.load();
 }
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+entry_point!(test_stackoverflow_main);
+
+fn test_stackoverflow_main(_boot_info: &'static BootInfo) -> ! {
   serial_print!("stack_overflow... ");
 
   rust_os::gdt::init();

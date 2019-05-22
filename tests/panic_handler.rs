@@ -2,16 +2,18 @@
 #![no_main]
 #![feature(panic_info_message)]
 
+use bootloader::{BootInfo, entry_point};
 use core::fmt;
 use core::fmt::Write;
 use core::panic::PanicInfo;
 use rust_os::{QemuExitCode, exit_qemu, serial_print, serial_println};
 
 const MESSAGE: &str = "Example panic message from panic_handler test";
-const PANIC_LINE: u32 = 16; // adjust this when moving the `panic!` call
+const PANIC_LINE: u32 = 18; // adjust this when moving the `panic!` call
 
-#[no_mangle]
-pub extern "C" fn _start() -> ! {
+entry_point!(test_panic_main);
+
+fn test_panic_main(_boot_info: &'static BootInfo) -> ! {
   serial_print!("panic_handler... ");
   panic!(MESSAGE); // must be in line `PANIC_LINE`
 }
@@ -20,7 +22,6 @@ fn check_location(info: &PanicInfo) {
   let location = info.location().unwrap_or_else(|| fail("no location"));
 
   if location.file() != file!() {
-    fail(location.file());
     fail("file name wrong");
   }
 
